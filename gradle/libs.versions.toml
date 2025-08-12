@@ -1,8 +1,8 @@
 # Documentation on libs.versions.toml: https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-kotlin = "2.1.0"
-kore = "1.24.0-1.21.4"
+kotlin = "2.2.0"
+kore = "1.25.0-25w03a"
 
 [libraries]
 kore = { module = "io.github.ayfri.kore:kore", version.ref = "kore" }
