@@ -1,10 +1,12 @@
 # Documentation on libs.versions.toml: https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-kotlin = "2.2.0"
 kore = "1.25.0-25w03a"
+kotlin = "2.2.0"
+kotlinx-io = "0.8.0"
 
 [libraries]
+kotlinx-io = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kotlinx-io" }
 kore = { module = "io.github.ayfri.kore:kore", version.ref = "kore" }
 
 [plugins]

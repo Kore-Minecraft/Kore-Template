@@ -14,6 +14,7 @@ repositories {
 dependencies {
 	// Install Kore.
 	implementation(libs.kore)
+	implementation(libs.kotlinx.io)
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
