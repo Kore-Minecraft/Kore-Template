@@ -4,6 +4,9 @@
 kore = "1.25.0-25w03a"
 kotlin = "2.2.0"
 kotlinx-io = "0.8.0"
+kore = "1.37.0-1.21.10"
+kotlin = "2.3.0"
+kotlinx-io = "0.8.2"
 
 [libraries]
 kotlinx-io = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kotlinx-io" }
