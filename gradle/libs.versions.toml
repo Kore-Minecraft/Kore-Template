@@ -1,9 +1,6 @@
 # Documentation on libs.versions.toml: https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-kore = "1.25.0-25w03a"
-kotlin = "2.2.0"
-kotlinx-io = "0.8.0"
 kore = "1.37.0-1.21.10"
 kotlin = "2.3.0"
 kotlinx-io = "0.8.2"
