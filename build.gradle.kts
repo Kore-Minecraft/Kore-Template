@@ -14,7 +14,6 @@ repositories {
 dependencies {
 	// Install Kore.
 	implementation(libs.kore)
-	implementation(libs.kotlinx.io)
 }
 
 // Apply the required Java 25 toolchain
