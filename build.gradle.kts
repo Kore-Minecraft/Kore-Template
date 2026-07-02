@@ -17,14 +17,9 @@ dependencies {
 	implementation(libs.kotlinx.io)
 }
 
-// Apply a specific Java toolchain to ease working on different environments.
+// Apply the required Java 25 toolchain
 kotlin {
-	jvmToolchain(21)
-
-	// Activate required compiler options for using Kore.
-	compilerOptions {
-		freeCompilerArgs = listOf("-Xcontext-parameters")
-	}
+	jvmToolchain(25)
 }
 
 application {
