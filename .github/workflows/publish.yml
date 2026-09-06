@@ -1,0 +1,58 @@
+name: Publish datapack
+
+on:
+  release:
+    types: [ published ]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish (e.g. 1.0.0). Defaults to the git ref name."
+        required: false
+        type: string
+
+env:
+  PACK_NAME: my_datapack
+
+jobs:
+  publish:
+    name: Publish to Modrinth
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Generate datapack
+        run: ./gradlew koreBuild
+
+      - name: Zip datapack
+        working-directory: build/kore/${{ env.PACK_NAME }}
+        run: zip -r "$GITHUB_WORKSPACE/${{ env.PACK_NAME }}.zip" .
+
+      - name: Publish to Modrinth
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          name: "${{ env.PACK_NAME }} ${{ inputs.version || github.ref_name }}"
+          version: ${{ inputs.version || github.ref_name }}
+          version-type: release
+
+          files: ${{ env.PACK_NAME }}.zip
+          loaders: datapack
+          game-versions: |
+            26.2
+
+          # Accepts the project slug or ID, the Modrinth project must already exist.
+          modrinth-id: my-datapack
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+
+          github-token: ${{ secrets.GITHUB_TOKEN }}
