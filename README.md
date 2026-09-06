@@ -1,56 +1,102 @@
-# Kore Datapack Template for Minecraft
+# Kore Datapack Template
 
-Welcome to the Kore Datapack Template project! This repository is designed to be a starting point for Minecraft enthusiasts and developers
-looking to create custom datapacks with ease. By leveraging the power of the [Kore](https://kore.ayfri.com) library, you can streamline your
-development workflow and bring your creative Minecraft ideas to life.
+A ready-to-use starting point for building Minecraft datapacks in Kotlin with [Kore](https://kore.ayfri.com).
 
-## Getting Started
+Write Kotlin, run one Gradle task, and the generated datapack lands directly in your Minecraft world. No zip to copy by
+hand, no JSON to write.
 
-Before you begin, ensure you have the following prerequisite installed on your system:
+## Requirements
 
-- Java Development Kit (JDK) version 21 or higher
+- Java Development Kit (JDK) 25 or higher
+- A Minecraft installation (the template finds `.minecraft` by itself)
 
-## Setting Up Your Development Environment
+## 60-second start
 
-To set up your development environment, follow these simple steps:
-
-1. Clone the repository to your local machine:
+1. Click **Use this template** on GitHub, or clone it:
     ```shell
-    git clone https://github.com/Ayfri/Kore-Template.git
+    git clone https://github.com/Kore-Minecraft/Kore-Template.git my-datapack
+    cd my-datapack
     ```
-2. Change directory to the newly cloned repository:
+2. Open `build.gradle.kts` and set `packName` and `worlds` to your datapack name and your world:
+    ```kotlin
+    kore {
+        packName = "my_datapack"
+        mainClass = "MainKt"
+        worlds = listOf("My World")
+    }
+    ```
+   Not sure of the exact world name? Run `./gradlew koreWorlds` to list the ones Minecraft knows about.
+3. Set the same name in `src/main/kotlin/Main.kt`, in the `dataPack("my_datapack")` call.
+4. Build it and copy it into your world:
     ```shell
-    cd yourreponame
-    ```
-3. Execute the project to generate your datapack:
-    ```shell
-    ./gradlew run
+    ./gradlew koreRun
     ```
 
-After running the project, you'll find the generated datapack in the `out` directory, ready to be used in your Minecraft world.
+Type `/reload` in game and your datapack is live.
 
-## Making Changes to Your Datapack
+## The development loop
 
-When you're ready to make changes or updates to your datapack:
+```shell
+./gradlew koreRun --continuous
+```
 
-- Edit the `Main.kt` file with your desired changes, then rerun the project to apply them.
-- If you need to update the Kore library or Kotlin version, adjust the `libs.versions.toml` file as needed, and rerun the project to ensure
-  the changes take effect.
+Gradle watches your sources: every save regenerates the pack and copies it into your worlds. On a dedicated server with
+RCON enabled, `/reload` is sent for you, so the loop is fully hands-free.
 
-## Frequently Asked Questions (FAQ)
+```properties
+# server.properties
+enable-rcon=true
+rcon.port=25575
+rcon.password=changeit
+```
 
-- **Q:** How do I add a new function to the datapack?
-- **A:** Use the `function` keyword to create a new function and write your code within it.
+The password is read from the `RCON_PASSWORD` environment variable. A closed game or a missing password is reported and
+skipped, never a build failure.
 
-- **Q:** How do I add a new tag to the datapack?
-- **A:** Use the `tag` keyword to create a new tag and include your elements within it.
+## Tasks
 
-For detailed instructions and best practices on using the Kore library, refer to
-the [official Kore documentation](https://kore.ayfri.com/docs/home).
+| Task          | What it does                                                              |
+|---------------|---------------------------------------------------------------------------|
+| `koreRun`     | Build, copy into every world, reload. The one to use with `--continuous`. |
+| `koreBuild`   | Runs `Main.kt` and generates the pack into `build/kore`.                  |
+| `koreLink`    | Copies the generated pack into every configured target.                   |
+| `koreReload`  | Sends `reload` to a running server over RCON.                             |
+| `koreWorlds`  | Lists the worlds found in your Minecraft directory.                       |
+| `koreClean`   | Deletes the generated pack and unlinks it from every world.               |
 
-## Contributing to the Project
+Full options in the [Gradle plugin documentation](https://kore.ayfri.com/docs/guides/gradle-plugin), including dedicated
+server folders, resource packs and symlinks instead of copies.
 
-Your contributions are what make the community great. We encourage you to contribute to the project by forking the repository, making your
-improvements, and submitting a pull request with your changes. Together, we can make the Kore Datapack Template even better!
+## Writing your datapack
 
-Thank you for supporting the project, and happy Datapacking!
+Everything happens inside the `dataPack { }` block in `src/main/kotlin/Main.kt`:
+
+```kotlin
+dataPack("my_datapack") {
+	path(System.getProperty("kore.output") ?: "out")
+
+	load("main") {
+		say("Hello Minecraft world !")
+	}
+}
+```
+
+`load("main") { }` runs on every `/reload`, `function("name") { }` declares a callable function, and every data-driven resource
+(predicates, recipes, loot tables, advancements...) has a matching builder. Start with the
+[official documentation](https://kore.ayfri.com/docs/home).
+
+Upgrading Kore or Kotlin is a one-line change in `gradle/libs.versions.toml`. The Kore version and the Gradle plugin
+version are the same string, so both move together.
+
+## Publishing
+
+`.github/workflows/publish.yml` builds the pack and uploads it to Modrinth every time you publish a GitHub release. Set
+`PACK_NAME` and `modrinth-id` at the top of the file, add a `MODRINTH_TOKEN` repository secret with the "Create versions"
+scope, and the project is ready to ship.
+
+## Contributing
+
+Issues and pull requests are welcome, on this template and on
+[Kore itself](https://github.com/Ayfri/Kore).
+
+Happy datapacking!
