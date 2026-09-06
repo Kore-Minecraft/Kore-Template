@@ -1,27 +1,25 @@
 plugins {
-	// Apply the kotlin.jvm plugin to add support for Kotlin.
 	alias(libs.plugins.kotlin)
-
-	// Apply the application plugin to add support for running the application.
-	application
+	alias(libs.plugins.kore)
 }
 
 repositories {
-	// Use Maven Central for resolving dependencies.
 	mavenCentral()
 }
 
 dependencies {
-	// Install Kore.
 	implementation(libs.kore)
 }
 
-// Apply the required Java 25 toolchain
 kotlin {
 	jvmToolchain(25)
 }
 
-application {
-	// Define the main class for the application.
+kore {
+	// Must match the `dataPack("...")` name in Main.kt, this is the folder Minecraft sees.
+	packName = "my_datapack"
 	mainClass = "MainKt"
+
+	// Worlds under `.minecraft/saves` the pack is copied into. Run `gradlew koreWorlds` to list them.
+	worlds = listOf("My World")
 }

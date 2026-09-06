@@ -1,17 +1,25 @@
+import io.github.ayfri.kore.DataPack
 import io.github.ayfri.kore.commands.say
 import io.github.ayfri.kore.dataPack
-import io.github.ayfri.kore.functions.function
-
-const val outputPathFolder = "./out"
+import io.github.ayfri.kore.features.predicates.predicate
+import io.github.ayfri.kore.functions.load
+import io.github.ayfri.kore.path
 
 fun main() {
 	val myDatapack = dataPack("my_datapack") {
-		path(outputPathFolder) // Set the output path for the datapack
+		// The Gradle plugin passes its output directory here, `out` is the fallback when running `main` from the IDE.
+		path(System.getProperty("kore.output") ?: "out")
 
-		function("my_function") {
+		load("main") {
 			say("Hello Minecraft world !")
 		}
+
+		myPredicate()
 	}
 
-	myDatapack.generateZip()
+	myDatapack.generate()
+}
+
+fun DataPack.myPredicate() = predicate("test") {
+
 }
