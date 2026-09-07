@@ -2,7 +2,7 @@
 
 [versions]
 kore = "2.14.0-26.2"
-kotlin = "2.4.0"
+kotlin = "2.4.20"
 
 [libraries]
 kore = { module = "io.github.ayfri.kore:kore", version.ref = "kore" }
