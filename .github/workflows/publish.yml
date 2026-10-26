@@ -49,7 +49,7 @@ jobs:
           files: ${{ env.PACK_NAME }}.zip
           loaders: datapack
           game-versions: |
-            26.2
+            26.3
 
           # Accepts the project slug or ID, the Modrinth project must already exist.
           modrinth-id: my-datapack
